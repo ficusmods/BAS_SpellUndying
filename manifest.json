@@ -1,0 +1,7 @@
+﻿{
+    "Name": "UndyingSpell",
+	"Description": "Spell that makes an enemy invincible",
+	"Author": "fks",
+	"ModVersion": "1.0",
+    "GameVersion": "9.3"
+}
