@@ -10,32 +10,26 @@ namespace SpellUndying
     {
 
         Dictionary<Collider, Creature> collider_map = new Dictionary<Collider, Creature>();
+        Dictionary<Creature, RagdollPart> torso_rpart_map = new Dictionary<Creature, RagdollPart>();
         LinkedList<Creature> undying_list = new LinkedList<Creature>();
 
         SpellUndying()
         {
             EventManager.onCreatureSpawn += EventManager_onCreatureSpawn;
-            EventManager.onCreatureKill += EventManager_onCreatureKill;
         }
 
-        private void EventManager_onCreatureKill(Creature creature, Player player, CollisionInstance collisionInstance, EventTime eventTime)
+        private void EventManager_onCreatureSpawn(Creature creature)
         {
             foreach (RagdollPart rp in creature.ragdoll.parts)
             {
                 foreach (Collider c in rp.colliderGroup.colliders)
                 {
-                    collider_map.Remove(c);
-                }
-            }
-        }
-
-        private void EventManager_onCreatureSpawn(Creature creature)
-        {
-            foreach(RagdollPart rp in creature.ragdoll.parts)
-            {
-                foreach(Collider c in rp.colliderGroup.colliders)
-                {
                     collider_map[c] = creature;
+                }
+
+                if (rp.data.partTypes.Contains(RagdollPart.Type.Torso))
+                {
+                    torso_rpart_map[creature] = rp;
                 }
             }
         }
@@ -55,37 +49,68 @@ namespace SpellUndying
                         part.sliceForceKill = false;
                     }
                     undying_list.AddLast(creature);
+                    creature_to_max_health(creature);
                 }
             }
         }
+
+        public override void OnImbueCollisionStart(CollisionInstance collisionInstance)
+        {
+            base.OnImbueCollisionStart(collisionInstance);
+            Creature creature = collider_map[collisionInstance.targetCollider];
+
+            if (undying_list.Contains(creature))
+            {
+                if (check_torso_stab(creature, collisionInstance))
+                {
+                    kill_creature(creature);
+                }
+            }
+        }
+
 
         private void Creature_OnDamageEvent(CollisionInstance collisionInstance)
         {
             if (collisionInstance.targetCollider != null)
             {
-                Creature creature = collider_map[collisionInstance.targetCollider];
-                if (undying_list.Contains(creature))
+                if (collider_map.ContainsKey(collisionInstance.targetCollider))
                 {
-                    creature.maxHealth = float.MaxValue;
-                    creature.currentHealth = creature.maxHealth;
-                }
-            }
-        }
-        public override void OnImbueCollisionStart(CollisionInstance collisionInstance)
-        {
-            if (collisionInstance.targetCollider != null)
-            {
-                Creature creature = collider_map[collisionInstance.targetCollider];
-                if (undying_list.Contains(creature))
-                {
-                    if(collisionInstance.damageStruct.penetrationDeepReached)
+                    Creature creature = collider_map[collisionInstance.targetCollider];
+
+                    if (undying_list.Contains(creature))
                     {
-                        undying_list.Remove(creature);
-                        creature.Kill();
+                        creature_to_max_health(creature);
                     }
                 }
             }
-            base.OnImbueCollisionStart(collisionInstance);
+        }
+
+        private bool check_torso_stab(Creature c, CollisionInstance ci)
+        {
+            DamageStruct ds = ci.damageStruct;
+            
+            return (ds.hitRagdollPart == torso_rpart_map[c]);
+        }
+
+        private void kill_creature(Creature creature)
+        {
+            undying_list.Remove(creature);
+
+            foreach (RagdollPart rp in creature.ragdoll.parts)
+            {
+                foreach (Collider c in rp.colliderGroup.colliders)
+                {
+                    collider_map.Remove(c);
+                }
+            }
+
+            creature.Kill();
+        }
+
+        private void creature_to_max_health(Creature c)
+        {
+            c.maxHealth = float.MaxValue;
+            c.currentHealth = c.maxHealth;
         }
     }
 }
