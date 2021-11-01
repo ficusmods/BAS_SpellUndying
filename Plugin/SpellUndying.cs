@@ -9,107 +9,85 @@ namespace SpellUndying
     public class SpellUndying : SpellCastLightning
     {
 
-        Dictionary<Collider, Creature> collider_map = new Dictionary<Collider, Creature>();
-        Dictionary<Creature, RagdollPart> torso_rpart_map = new Dictionary<Creature, RagdollPart>();
         LinkedList<Creature> undying_list = new LinkedList<Creature>();
 
-        SpellUndying()
+        public override void OnSprayLoop()
         {
-            EventManager.onCreatureSpawn += EventManager_onCreatureSpawn;
-        }
+            base.OnSprayLoop();
 
-        private void EventManager_onCreatureSpawn(Creature creature)
-        {
-            foreach (RagdollPart rp in creature.ragdoll.parts)
+            if (base.boltHits[0].collider)
             {
-                foreach (Collider c in rp.colliderGroup.colliders)
+                ColliderGroup BoltHitColliderGroup = base.boltHits[0].collider.GetComponentInParent<ColliderGroup>();
+                if (BoltHitColliderGroup)
                 {
-                    collider_map[c] = creature;
-                }
-
-                if (rp.data.partTypes.Contains(RagdollPart.Type.Torso))
-                {
-                    torso_rpart_map[creature] = rp;
-                }
-            }
-        }
-
-        public override void Fire(bool active)
-        {
-            base.Fire(active);
-            foreach(BoltHit hit in base.boltHits)
-            {
-                Collider collider = hit.collider;
-                if(collider != null && collider_map.ContainsKey(collider))
-                {
-                    Creature creature = collider_map[collider];
-                    creature.OnDamageEvent += Creature_OnDamageEvent;
-                    foreach (CreatureData.PartData part in creature.data.ragdollData.parts)
+                    RagdollPart rp = BoltHitColliderGroup.collisionHandler.ragdollPart;
+                    if (rp)
                     {
-                        part.sliceForceKill = false;
+                        Creature creature = rp.ragdoll.creature;
+                        if (!undying_list.Contains(creature))
+                        {
+                            creature.OnDamageEvent += Creature_OnDamageEvent;
+                            undying_list.AddLast(creature);
+                            creature_to_max_health(creature);
+                        }
                     }
-                    undying_list.AddLast(creature);
-                    creature_to_max_health(creature);
                 }
             }
         }
-
-        public override void OnImbueCollisionStart(CollisionInstance collisionInstance)
-        {
-            base.OnImbueCollisionStart(collisionInstance);
-            Creature creature = collider_map[collisionInstance.targetCollider];
-
-            if (undying_list.Contains(creature))
-            {
-                if (check_torso_stab(creature, collisionInstance))
-                {
-                    kill_creature(creature);
-                }
-            }
-        }
-
 
         private void Creature_OnDamageEvent(CollisionInstance collisionInstance)
         {
-            if (collisionInstance.targetCollider != null)
-            {
-                if (collider_map.ContainsKey(collisionInstance.targetCollider))
-                {
-                    Creature creature = collider_map[collisionInstance.targetCollider];
+            RagdollPart rp = collisionInstance.damageStruct.hitRagdollPart;
+            if (!rp) return;
+            Creature creature = rp.ragdoll.creature;
+            if (!undying_list.Contains(creature)) return;
 
-                    if (undying_list.Contains(creature))
+            if (collisionInstance.damageStruct.baseDamage != 0xDEAD2BAD)
+            {
+                creature_to_max_health(creature);
+            }
+
+            if (!collisionInstance.sourceColliderGroup) return;
+            Item item = collisionInstance.sourceColliderGroup.collisionHandler.item;
+            if (!item) return;
+
+            foreach (Imbue imbue in item.imbues)
+            {
+                if (imbue.spellCastBase != null)
+                {
+                    if (imbue.spellCastBase.id == this.id)
                     {
-                        creature_to_max_health(creature);
+                        if (check_valid_stab(collisionInstance))
+                        {
+                            kill_creature(creature, collisionInstance);
+                            break;
+                        }
                     }
                 }
             }
         }
 
-        private bool check_torso_stab(Creature c, CollisionInstance ci)
+        private bool check_valid_stab(CollisionInstance ci)
         {
-            DamageStruct ds = ci.damageStruct;
-            
-            return (ds.hitRagdollPart == torso_rpart_map[c]);
+            return (ci.damageStruct.damageType == DamageType.Pierce
+                && (ci.damageStruct.hitRagdollPart.type == RagdollPart.Type.Neck
+                    || ci.damageStruct.hitRagdollPart.type == RagdollPart.Type.Head)
+                && ci.damageStruct.penetrationDeepReached);
         }
 
-        private void kill_creature(Creature creature)
+        private void kill_creature(Creature creature, CollisionInstance ci)
         {
             undying_list.Remove(creature);
+            CollisionInstance collisionInstance = new CollisionInstance(new DamageStruct(DamageType.Energy, 0xDEAD2BAD));
 
-            foreach (RagdollPart rp in creature.ragdoll.parts)
-            {
-                foreach (Collider c in rp.colliderGroup.colliders)
-                {
-                    collider_map.Remove(c);
-                }
-            }
-
-            creature.Kill();
+            creature.maxHealth = 0xDEAD2BAD - 1.0f;
+            creature.currentHealth = creature.maxHealth;
+            creature.Damage(collisionInstance);
         }
 
         private void creature_to_max_health(Creature c)
         {
-            c.maxHealth = float.MaxValue;
+            c.maxHealth = float.PositiveInfinity;
             c.currentHealth = c.maxHealth;
         }
     }
