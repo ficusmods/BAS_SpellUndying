@@ -41,15 +41,15 @@
       "linkTintColor": "Main",
       "linkEmissionColor": "None",
       "mainColorStart": {
-        "r": 1.73383141,
-        "g": 1.960762,
-        "b": 2.14954519,
+        "r": 8.0,
+        "g": 1.0,
+        "b": 10.0,
         "a": 1.0
       },
       "mainColorEnd": {
-        "r": 1.73383141,
-        "g": 1.960762,
-        "b": 2.14954519,
+        "r": 8.0,
+        "g": 3.0,
+        "b": 10.0,
         "a": 1.0
       },
       "secondaryColorStart": {
@@ -65,15 +65,15 @@
         "a": 0.0
       },
       "mainNoHdrColorStart": {
-        "r": 1.73383141,
-        "g": 1.960762,
-        "b": 2.14954519,
+        "r": 8.0,
+        "g": 1.0,
+        "b": 10.0,
         "a": 1.0
       },
       "mainNoHdrColorEnd": {
-        "r": 1.73383141,
-        "g": 1.960762,
-        "b": 2.14954519,
+        "r": 8.0,
+        "g": 3.0,
+        "b": 10.0,
         "a": 1.0
       },
       "secondaryNoHdrColorStart": {
@@ -218,15 +218,15 @@
       "linkTintColor": "Main",
       "linkEmissionColor": "None",
       "mainColorStart": {
-        "r": 1.73383141,
-        "g": 1.960762,
-        "b": 2.14954519,
+        "r": 8.0,
+        "g": 1.0,
+        "b": 10.0,
         "a": 1.0
       },
       "mainColorEnd": {
-        "r": 1.73383141,
-        "g": 1.960762,
-        "b": 2.14954519,
+        "r": 8.0,
+        "g": 3.0,
+        "b": 10.0,
         "a": 1.0
       },
       "secondaryColorStart": {
@@ -242,15 +242,15 @@
         "a": 0.0
       },
       "mainNoHdrColorStart": {
-        "r": 1.73383141,
-        "g": 1.960762,
-        "b": 2.14954519,
+        "r": 8.0,
+        "g": 1.0,
+        "b": 10.0,
         "a": 1.0
       },
       "mainNoHdrColorEnd": {
-        "r": 1.73383141,
-        "g": 1.960762,
-        "b": 2.14954519,
+        "r": 8.0,
+        "g": 3.0,
+        "b": 10.0,
         "a": 1.0
       },
       "secondaryNoHdrColorStart": {
@@ -749,15 +749,15 @@
       "linkTintColor": "Main",
       "linkEmissionColor": "None",
       "mainColorStart": {
-        "r": 150.0,
-        "g": 15.0,
-        "b": 255.0,
+        "r": 8.0,
+        "g": 1.0,
+        "b": 10.0,
         "a": 1.0
       },
       "mainColorEnd": {
-        "r": 150.0,
-        "g": 15.0,
-        "b": 255.0,
+        "r": 8.0,
+        "g": 3.0,
+        "b": 10.0,
         "a": 1.0
       },
       "secondaryColorStart": {
@@ -773,15 +773,15 @@
         "a": 0.0
       },
       "mainNoHdrColorStart": {
-        "r": 150.0,
-        "g": 15.0,
-        "b": 255.0,
+        "r": 8.0,
+        "g": 1.0,
+        "b": 10.0,
         "a": 1.0
       },
       "mainNoHdrColorEnd": {
-        "r": 150.0,
-        "g": 15.0,
-        "b": 255.0,
+        "r": 8.0,
+        "g": 3.0,
+        "b": 10.0,
         "a": 1.0
       },
       "secondaryNoHdrColorStart": {
