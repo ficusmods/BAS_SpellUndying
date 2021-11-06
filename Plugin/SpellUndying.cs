@@ -29,11 +29,16 @@ namespace SpellUndying
                             creature.OnDamageEvent += Creature_OnDamageEvent;
                             undying_list.AddLast(creature);
                             creature_to_max_health(creature);
+                            foreach(RagdollPart part in creature.ragdoll.parts)
+                            {
+                                part.data.sliceForceKill = false;
+                            }
                         }
                     }
                 }
             }
         }
+
 
         private void Creature_OnDamageEvent(CollisionInstance collisionInstance)
         {
