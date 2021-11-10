@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace SpellUndying
 {
-    class UndyingCreature : MonoBehaviour
+    public class UndyingCreatureModule : MonoBehaviour
     {
         public bool dieOnHeadChop = true;
         public Creature creature;

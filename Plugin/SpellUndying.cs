@@ -25,10 +25,10 @@ namespace SpellUndying
                         Creature creature = rp.ragdoll.creature;
                         if (!creature.isPlayer)
                         {
-                            if (!creature.gameObject.TryGetComponent<UndyingCreature>(out UndyingCreature ur))
+                            if (!creature.gameObject.TryGetComponent<UndyingCreatureModule>(out UndyingCreatureModule ur))
                             {
                                 Logger.Detailed("Adding Undying effect to {0} ({1}, {2})", creature.name, creature.creatureId, creature.GetInstanceID());
-                                var uc = creature.gameObject.AddComponent<UndyingCreature>();
+                                var uc = creature.gameObject.AddComponent<UndyingCreatureModule>();
                                 uc.dieOnHeadChop = dieOnHeadChop;
                             }
                         }
