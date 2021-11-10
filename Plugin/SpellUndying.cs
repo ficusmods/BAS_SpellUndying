@@ -94,7 +94,7 @@ namespace SpellUndying
 
         private void creature_to_max_health(Creature c)
         {
-            c.maxHealth = float.PositiveInfinity;
+            c.maxHealth = float.MaxValue;
             c.currentHealth = c.maxHealth;
         }
     }
