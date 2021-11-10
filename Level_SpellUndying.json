@@ -1,0 +1,19 @@
+{
+  "$type": "ThunderRoad.LevelData, Assembly-CSharp",
+  "id": "Master",
+  "version": 3,
+  "modes": [
+    {
+      "name": "Default",
+      "modules": 
+	  [
+        {
+          "$type": "SpellUndying.LoadModule, SpellUndying",
+          "mod_name": "SpellUndying",
+          "mod_version": "1.1",
+          "logger_level": "Basic"
+        }
+      ]
+    }
+  ]
+}

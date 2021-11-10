@@ -26,6 +26,7 @@ namespace SpellUndying
                         Creature creature = rp.ragdoll.creature;
                         if (!undying_list.Contains(creature))
                         {
+                            Logger.Detailed("Adding UndyingSpell effect to {0} ({1}, {2})", creature.name, creature.creatureId, creature.GetInstanceID());
                             creature.OnDamageEvent += Creature_OnDamageEvent;
                             undying_list.AddLast(creature);
                             creature_to_max_health(creature);
@@ -64,6 +65,7 @@ namespace SpellUndying
                     {
                         if (check_valid_stab(collisionInstance))
                         {
+                            Logger.Detailed("Killing undying creature {0} ({1}, {2})", creature.name, creature.creatureId, creature.GetInstanceID());
                             kill_creature(creature, collisionInstance);
                             break;
                         }
