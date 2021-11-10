@@ -23,11 +23,11 @@ namespace SpellUndying
                     if (rp)
                     {
                         Creature creature = rp.ragdoll.creature;
-                        Logger.Detailed("Adding Undying effect to {0} ({1}, {2})", creature.name, creature.creatureId, creature.GetInstanceID());
                         if (!creature.isPlayer)
                         {
                             if (!creature.gameObject.TryGetComponent<UndyingCreature>(out UndyingCreature ur))
                             {
+                                Logger.Detailed("Adding Undying effect to {0} ({1}, {2})", creature.name, creature.creatureId, creature.GetInstanceID());
                                 var uc = creature.gameObject.AddComponent<UndyingCreature>();
                                 uc.dieOnHeadChop = dieOnHeadChop;
                             }
