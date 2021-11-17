@@ -25,6 +25,12 @@ namespace SpellUndying
             }
         }
 
+        private void OnDisable()
+        {
+            this.creature.OnDamageEvent -= Creature_OnDamageEvent;
+        }
+
+
         public void creature_to_max_health()
         {
             this.creature.maxHealth = float.MaxValue;
