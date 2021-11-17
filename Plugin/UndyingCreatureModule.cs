@@ -90,19 +90,19 @@ namespace SpellUndying
 
         private void LateUpdate()
         {
-            if (cant_think_straight())
+            if (this.creature.state != Creature.State.Dead)
             {
-                kill_myself();
+                if (cant_think_straight())
+                {
+                    kill_myself();
+                }
             }
         }
 
         private void Creature_OnDamageEvent(CollisionInstance collisionInstance)
         {
-            RagdollPart rp = collisionInstance.damageStruct.hitRagdollPart;
-
-            if (collisionInstance.damageStruct.baseDamage == 0xDEAD2BAD) return;
-
             creature_to_max_health();
+            if (collisionInstance.damageStruct.baseDamage == 0xDEAD2BAD) return;
 
             if (where_it_hurts(collisionInstance))
             {
