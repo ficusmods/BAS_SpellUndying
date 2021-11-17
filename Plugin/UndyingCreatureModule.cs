@@ -83,8 +83,8 @@ namespace SpellUndying
         {
             Logger.Detailed("Killing undying {0} ({1}, {2})", creature.name, creature.creatureId, creature.GetInstanceID());
             CollisionInstance killing_collision = new CollisionInstance(new DamageStruct(DamageType.Energy, 0xDEAD2BAD));
-            this.creature.maxHealth = 0xDEAD2BAD - 1.0f;
-            this.creature.currentHealth = creature.maxHealth;
+            this.creature.maxHealth = creature.data.health;
+            this.creature.currentHealth = creature.data.health;
             this.creature.Damage(killing_collision);
         }
 
@@ -101,9 +101,10 @@ namespace SpellUndying
 
         private void Creature_OnDamageEvent(CollisionInstance collisionInstance)
         {
-            creature_to_max_health();
+            
             if (collisionInstance.damageStruct.baseDamage == 0xDEAD2BAD) return;
-
+            creature_to_max_health();
+            
             if (where_it_hurts(collisionInstance))
             {
                 kill_myself();
