@@ -10,7 +10,7 @@
         {
           "$type": "SpellUndying.LoadModule, SpellUndying",
           "mod_name": "SpellUndying",
-          "mod_version": "1.1",
+          "mod_version": "1.2",
           "logger_level": "Basic",
           
           "dieOnHeadChop": false
