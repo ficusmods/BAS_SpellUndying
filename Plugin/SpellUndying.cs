@@ -30,6 +30,8 @@ namespace SpellUndying
                                 Logger.Detailed("Adding Undying effect to {0} ({1}, {2})", creature.name, creature.creatureId, creature.GetInstanceID());
                                 var uc = creature.gameObject.AddComponent<UndyingCreatureModule>();
                                 uc.dieOnHeadChop = dieOnHeadChop;
+                                creature.OnKillEvent += (CollisionInstance collisionInstance, EventTime eventTime) => { GameObject.Destroy(uc); };
+                                creature.OnDespawnEvent += (EventTime eventTime) => { GameObject.Destroy(uc); };
                             }
                         }
                     }
