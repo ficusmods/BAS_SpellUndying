@@ -13,9 +13,13 @@ namespace SpellUndying
         {
             base.OnSprayLoop();
 
-            if (base.boltHits[0].collider)
+            int count = HitLookup(this.coneAngle, this.currentCharge * this.boltMaxRange);
+            if (count <= 0)
+                return;
+            SpellCastLightning.BoltHit boltHit = count > 1 ? PickBoltHit(count) : this.boltHits[0];
+            if (boltHit.collider != null)
             {
-                ColliderGroup BoltHitColliderGroup = base.boltHits[0].collider.GetComponentInParent<ColliderGroup>();
+                ColliderGroup BoltHitColliderGroup = boltHit.collider.GetComponentInParent<ColliderGroup>();
                 if (BoltHitColliderGroup)
                 {
                     RagdollPart rp = BoltHitColliderGroup.collisionHandler.ragdollPart;
